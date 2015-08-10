@@ -1,0 +1,36 @@
+<div class="container" ng-controller="DashboardCtrl">
+
+    <div class="row">
+
+        <div class="col-lg-12">
+            <h1 class="page-header"><small>Context Metadata Services</small>
+            </h1>
+          
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="panel panel-default text-left">
+                <div class="panel-heading">
+                    <strong>End to End Process.........</strong>
+                </div>
+                <div class="panel-body">
+                    <s-Grid id="myGrid" ng-style="width:1000px;height:500px;"></s-Grid>
+                    <form class="navbar-form navbar-left" role="search">
+                      <button type="submit" class="btn btn-primary" ng-click="newProcess()">New </button>
+                      <button type="submit" class="btn btn-primary" ng-click="editProcess()">Edit</button>
+                      <button type="submit" class="btn btn-primary" >Delete</button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+<!-- /.container -->
+

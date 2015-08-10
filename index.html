@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+
+    <!-- Meta-Information -->
+    <title>ACME Inc.</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="ACME Inc.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Vendor: Bootstrap Stylesheets http://getbootstrap.com -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+     <link rel="stylesheet" href="./grid/slickGrid/slick.grid.css" type="text/css"/>
+  <link rel="stylesheet" href="./grid/slickGrid/controls/slick.pager.css" type="text/css"/>
+  <link rel="stylesheet" href="./grid/slickGrid/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+  <link rel="stylesheet" href="./grid/slickGrid/examples/examples.css" type="text/css"/>
+  <link rel="stylesheet" href="./grid/slickGrid/controls/slick.columnpicker.css" type="text/css"/>
+
+    <!-- Our Website CSS Styles -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+    .slick-cell-checkboxsel {
+      background: #f0f0f0;
+      border-right-color: silver;
+      border-right-style: solid;
+    }
+  </style>
+
+</head>
+<body ng-app="tutorialWebApp">
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<!-- Our Website Content Goes Here -->
+<div ng-include='"templates/header.html"'></div>
+<div ng-view></div>
+<div ng-include='"templates/footer.html"'></div>
+
+<!-- Vendor: Javascripts -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<!-- Vendor: Angular, followed by our custom Javascripts -->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular-route.min.js"></script>
+
+<!-- Our Website Javascripts -->
+<script src="js/main.js"></script>
+<script src="js/dashboardCtrl.js"></script>
+<script src="js/gridDirective.js"></script>
+<script src="js/cmsServices.js"></script>
+
+<script src="./grid/slickGrid/lib/firebugx.js"></script>
+<script src="./grid/slickGrid/lib/jquery-1.7.min.js"></script>
+<script src="./grid/slickGrid/lib/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="./grid/slickGrid/lib/jquery.event.drag-2.2.js"></script>
+<script src="./grid/slickGrid/slick.core.js"></script>
+<script src="./grid/plugins/slick.checkboxselectcolumn.js"></script>
+<script src="./grid/plugins/slick.autotooltips.js"></script>
+<script src="./grid/plugins/slick.cellrangedecorator.js"></script>
+<script src="./grid/plugins/slick.cellrangeselector.js"></script>
+<script src="./grid/plugins/slick.cellcopymanager.js"></script>
+<script src="./grid/plugins/slick.cellselectionmodel.js"></script>
+<script src="./grid/slickGrid/plugins/slick.rowselectionmodel.js"></script>
+<script src="./grid/slickGrid/controls/slick.columnpicker.js"></script>
+<script src="./grid/slickGrid/slick.formatters.js"></script>
+<script src="./grid/slickGrid/slick.editors.js"></script>
+<script src="./grid/slickGrid/slick.grid.js"></script>
+<script src="./grid/slickGrid/slick.dataview.js"></script>
+<script src="./grid/slickGrid/controls/slick.pager.js"></script>
+<script src="./grid/myGrid.js"></script>
+<script src="./grid/addclear.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+<script src="./grid/highlight.js"></script>
+
+
+
+</body>
+</html>
