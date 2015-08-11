@@ -18,7 +18,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     // Home
     .when("/", {templateUrl: "partials/home.html", controller: "PageCtrl"})
     .when("/dashboard", {templateUrl: "partials/dashboard.html", controller: "DashboardCtrl"})
-    .when("/newProcess", {templateUrl: "partials/newProcess.html", controller: "DashboardCtrl"})
+    .when("/newProcess", {templateUrl: "partials/newProcess.html", controller: "NewProcessCtrl"})
     .when("/editProcess", {templateUrl: "partials/editProcess.html", controller: "DashboardCtrl"})
     .when("/about", {templateUrl: "partials/about.html", controller: "PageCtrl"})
     .when("/faq", {templateUrl: "partials/faq.html", controller: "PageCtrl"})
