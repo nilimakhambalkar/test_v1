@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>SlickGrid example 5: Collapsing</title>
+  <link rel="stylesheet" href="../slick.grid.css" type="text/css"/>
+  <link rel="stylesheet" href="../css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css"/>
+  <link rel="stylesheet" href="examples.css" type="text/css"/>
+
+  <style>
+    .cell-title {
+      font-weight: bold;
+    }
+
+    .cell-effort-driven {
+      text-align: center;
+    }
+
+    .toggle {
+      height: 9px;
+      width: 9px;
+      display: inline-block;
+    }
+
+    .toggle.expand {
+      background: url(../images/expand.gif) no-repeat center center;
+    }
+
+    .toggle.collapse {
+      background: url(../images/collapse.gif) no-repeat center center;
+    }
+
+  </style>
+</head>
+<body>
+<div id="myGrid" style="width:600px;height:500px;"></div>
+<button onclick="addProcess()">Add Process</button>
+<button onclick="addActivity()">Add Activity</button>
+
+<script src="../lib/firebugx.js"></script>
+
+<script src="../lib/jquery-1.7.min.js"></script>
+<script src="../lib/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="../lib/jquery.event.drag-2.2.js"></script>
+
+<script src="../slick.core.js"></script>
+<script src="../slick.formatters.js"></script>
+<script src="../slick.editors.js"></script>
+<script src="../slick.grid.js"></script>
+<script src="../slick.dataview.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
+
+<script>
+function requiredFieldValidator(value) {
+  if (value == null || value == undefined || !value.length) {
+    return {valid: false, msg: "This is a required field"};
+  } else {
+    return {valid: true, msg: null};
+  }
+}
+
+
+var TaskNameFormatter = function (row, cell, value, columnDef, dataContext) {
+  value = value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  var spacer = "<span style='display:inline-block;height:1px;width:" + (15 * dataContext["indent"]) + "px'></span>";
+  var idx = dataView.getIdxById(dataContext.id);
+  if (data[idx + 1] && data[idx + 1].indent > data[idx].indent) {
+    if (dataContext._collapsed) {
+      return spacer + " <span class='toggle expand'></span>&nbsp;" + value;
+    } else {
+      return spacer + " <span class='toggle collapse'></span>&nbsp;" + value;
+    }
+  } else {
+    return spacer + " <span class='toggle'></span>&nbsp;" + value;
+  }
+};
+
+var dataView;
+var grid;
+
+var data = [
+  {"id":1, "label":"India", "parent":0, "indent":0, "description":"abc", "owner":"Nilima", "updated":"08/12/2015"}
+ 
+];
+
+// var data = [
+//   {"id":1, "label":"India", "parent":0},
+//  {"id":2,  "label":"MH", "parent":1, "indent":1},
+//  {"id":3,  "label":"MP", "parent":1, "indent":1, "indent":1},
+//  {"id":4,  "label":"Mumbai", "parent":2, "indent":2},
+//   {"id":5,  "label":"Nagpur", "parent":2, "indent":2},
+//   {"id":6, "label":"India", "parent":0},
+//  {"id":7,  "label":"MH", "parent":1, "indent":1},
+//  {"id":8,  "label":"MP", "parent":1, "indent":1, "indent":1},
+//  {"id":9,  "label":"Mumbai", "parent":2, "indent":2},
+//   {"id":10,  "label":"Nagpur", "parent":2, "indent":2}
+// ];
+
+
+
+// var columns = [
+//   {id: "title", name: "Title", field: "title", width: 220, cssClass: "cell-title", formatter: TaskNameFormatter, editor: Slick.Editors.Text, validator: requiredFieldValidator},
+//   {id: "duration", name: "Duration", field: "duration", editor: Slick.Editors.Text},
+//   {id: "%", name: "% Complete", field: "percentComplete", width: 80, resizable: false, formatter: Slick.Formatters.PercentCompleteBar, editor: Slick.Editors.PercentComplete},
+//   {id: "start", name: "Start", field: "start", minWidth: 60, editor: Slick.Editors.Date},
+//   {id: "finish", name: "Finish", field: "finish", minWidth: 60, editor: Slick.Editors.Date},
+//   {id: "effort-driven", name: "Effort Driven", width: 80, minWidth: 20, maxWidth: 80, cssClass: "cell-effort-driven", field: "effortDriven", formatter: Slick.Formatters.Checkmark, editor: Slick.Editors.Checkbox, cannotTriggerInsert: true}
+// ];
+
+var columns = [
+   {id: "label", name: "Label", field: "label", cssClass: "cell-title", formatter: TaskNameFormatter, width:250},
+   {id: "description", name: "Description", field: "description",width:120},
+    {id: "updated", name: "Updated", field: "updated",width:120},
+     {id: "owner", name: "Owner", field: "owner",width:120}
+
+];
+var options = {
+  editable: true,
+  enableAddRow: true,
+  enableCellNavigation: true,
+  asyncEditorLoading: false
+};
+
+var percentCompleteThreshold = 0;
+var searchString = "";
+
+var selectedItem;
+function addProcess(){
+
+  console.log("addProcess***");
+  var newNode = {
+      "id": "new_" + (Math.round(Math.random() * 10000)),
+      "label": "New Process",
+      "indent": getIndent(),
+      "parent": getParentId()
+      };
+   // $.extend(item, args.item);
+    dataView.addItem(newNode);
+     dataView.refresh();
+}
+function addActivity(){
+
+  console.log("addActivity***");
+  var newNode = {
+      "id": "new_" + (Math.round(Math.random() * 10000)),
+      "label": "New Activity",
+      "indent": getIndent(),
+      "parent": getParentId()
+      };
+   // $.extend(item, args.item);
+    dataView.addItem(newNode);
+    dataView.refresh();
+}
+
+function getIndent(){
+  console.log(selectedItem)
+  if (selectedItem.indent !== undefined){
+    return selectedItem.indent+1;
+  }
+  return selectedItem.indent+1
+}
+function getParentId(){
+  return selectedItem.id;
+}
+
+function myFilter(item) {
+  
+
+  if (item.parent != null) {
+    var parent = _.find(data,{parent:item.parent}) ; //data[item.parent];
+    console.log(parent);
+
+    while (parent) {
+      if (parent._collapsed) {
+        return false;
+      }
+
+      parent = _.find(data,{id:parent.parent}); 
+    }
+  }
+
+  return true;
+}
+
+function percentCompleteSort(a, b) {
+  return a["percentComplete"] - b["percentComplete"];
+}
+
+$(function () {
+  var indent = 0;
+  var parents = [];
+
+  //prepare the data
+  
+  // for (var i = 0; i < 0; i++) {
+  //   var d = (data[i] = {});
+  //   var parent;
+
+  //   if (Math.random() > 0.8 && i > 0) {
+  //     indent++;
+  //     parents.push(i - 1);
+  //   } else if (Math.random() < 0.3 && indent > 0) {
+  //     indent--;
+  //     parents.pop();
+  //   } 
+	
+  //   if (parents.length > 0) {
+  //     parent = parents[parents.length - 1];
+  //   } else {
+  //     parent = null;
+  //   }
+
+  //   d["id"] = "id_" + i;
+  //   d["indent"] = indent;
+  //   d["parent"] = parent;
+  //   d["title"] = "Task " + i;
+  //   d["duration"] = "5 days";
+  //   d["percentComplete"] = Math.round(Math.random() * 100);
+  //   d["start"] = "01/01/2009";
+  //   d["finish"] = "01/05/2009";
+  //   d["effortDriven"] = (i % 5 == 0);
+  // }
+
+
+  // initialize the model
+  dataView = new Slick.Data.DataView({ inlineFilters: true });
+  dataView.beginUpdate();
+  console.log("***",data);
+  dataView.setItems(data);
+  dataView.setFilter(myFilter);
+  dataView.endUpdate();
+
+
+  // initialize the grid
+  grid = new Slick.Grid("#myGrid", dataView, columns, options);
+
+  grid.onCellChange.subscribe(function (e, args) {
+    dataView.updateItem(args.item.id, args.item);
+      console.log("item**",args.item)
+  });
+
+  grid.onAddNewRow.subscribe(function (e, args) {
+    var item = {
+      "id": "new_" + (Math.round(Math.random() * 10000)),
+      "indent": 0,
+      "title": "New task",
+      "duration": "1 day",
+      "percentComplete": 0,
+      "start": "01/01/2009",
+      "finish": "01/01/2009",
+      "effortDriven": false};
+    $.extend(item, args.item);
+    dataView.addItem(item);
+  });
+
+  grid.onClick.subscribe(function (e, args) {
+
+     console.log('clicked: ');
+           console.log(args);
+          selectedItem = dataView.getItem(args.row);
+           console.log(selectedItem);
+
+    if ($(e.target).hasClass("toggle")) {
+      item = dataView.getItem(args.row);
+
+      if (item) {
+        if (!item._collapsed) {
+          item._collapsed = true;
+        } else {
+          item._collapsed = false;
+        }
+
+        dataView.updateItem(item.id, item);
+      }
+      e.stopImmediatePropagation();
+    }
+  });
+
+
+  // wire up model events to drive the grid
+  dataView.onRowCountChanged.subscribe(function (e, args) {
+    grid.updateRowCount();
+    grid.render();
+  });
+
+  dataView.onRowsChanged.subscribe(function (e, args) {
+    grid.invalidateRows(args.rows);
+    grid.render();
+  });
+
+
+  var h_runfilters = null;
+
+  // wire up the slider to apply the filter to the model
+  $("#pcSlider").slider({
+    "range": "min",
+    "slide": function (event, ui) {
+      Slick.GlobalEditorLock.cancelCurrentEdit();
+
+      if (percentCompleteThreshold != ui.value) {
+        window.clearTimeout(h_runfilters);
+        h_runfilters = window.setTimeout(dataView.refresh, 10);
+        percentCompleteThreshold = ui.value;
+      }
+    }
+  });
+
+
+  // wire up the search textbox to apply the filter to the model
+  $("#txtSearch").keyup(function (e) {
+    Slick.GlobalEditorLock.cancelCurrentEdit();
+
+    // clear on Esc
+    if (e.which == 27) {
+      this.value = "";
+    }
+
+    searchString = this.value;
+    dataView.refresh();
+  })
+
+  
+})
+</script>
+</body>
+</html>
