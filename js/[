@@ -1,0 +1,27 @@
+[
+	{
+		id:"1",
+		label:"E2E",
+		parent:"",
+		indent:0
+	},
+	{
+		id:"2",
+		label:"Process 1",
+		parent:"1",
+		indent:1
+
+	},
+	{
+		id:"3",
+		label:"Process 2",
+		parent:"1"
+	},
+
+	{
+		id:"4",
+		label:"Activiy",
+		parent:"2"
+		indent:2
+	}
+]

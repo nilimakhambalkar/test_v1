@@ -1,5 +1,5 @@
 <div class="container" ng-controller="DashboardCtrl">
-
+     
     <div class="row">
 
         <div class="col-lg-12">
@@ -18,7 +18,7 @@
                     <strong>End to End Process.........</strong>
                 </div>
                 <div class="panel-body">
-                    <s-Grid id="myGrid" ng-style="width:1000px;height:500px;"></s-Grid>
+                    <s-Grid id="myGrid" style="height:400px" grid-value="gridData"></s-Grid>
                     <form class="navbar-form navbar-left" role="search">
                       <button type="submit" class="btn btn-primary" ng-click="newProcess()">New </button>
                       <button type="submit" class="btn btn-primary" ng-click="editProcess()">Edit</button>
