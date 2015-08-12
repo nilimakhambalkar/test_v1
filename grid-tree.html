@@ -33,7 +33,7 @@
   </style>
 </head>
 <body>
-<div id="myGrid" style="width:600px;height:500px;"></div>
+<div  style="width:600px;"></div>
 <button onclick="addProcess()">Add Process</button>
 <button onclick="addActivity()">Add Activity</button>
 
@@ -79,7 +79,7 @@ var dataView;
 var grid;
 
 var data = [
-  {"id":1, "label":"India", "parent":0, "indent":0, "description":"abc", "owner":"Nilima", "updated":"08/12/2015"}
+  {"id":1, "label":"E2E", name:"Please enter name", "indent":0, "description":"Please enter description"}
  
 ];
 
@@ -108,50 +108,82 @@ var data = [
 // ];
 
 var columns = [
-   {id: "label", name: "Label", field: "label", cssClass: "cell-title", formatter: TaskNameFormatter, width:250},
-   {id: "description", name: "Description", field: "description",width:120},
-    {id: "updated", name: "Updated", field: "updated",width:120},
-     {id: "owner", name: "Owner", field: "owner",width:120}
+{id: "id", name: "id", field: "id",width:120},
+   {id: "label", name: "#", field: "label", cssClass: "cell-title", formatter: TaskNameFormatter, width:250},
+   {id: "parent", name: "parent", field: "parent",width:120},
+       {id: "name", name: "Name", field: "name",width:120,editor: Slick.Editors.Text},
+   {id: "description", name: "Description", field: "description",width:120}
+   
+
 
 ];
 var options = {
   editable: true,
   enableAddRow: true,
   enableCellNavigation: true,
-  asyncEditorLoading: false
+  asyncEditorLoading: false,
+  autoHeight:true
 };
 
 var percentCompleteThreshold = 0;
 var searchString = "";
 
-var selectedItem;
+var selectedItem,
+selectedIndex;
 function addProcess(){
-
+if(!selectedItem){
+  alert("Please select element");
+}
+showCurrentItem(selectedItem);
   console.log("addProcess***");
+  var uniqueID = "P" + (Math.round(Math.random() * 10000))
   var newNode = {
-      "id": "new_" + (Math.round(Math.random() * 10000)),
-      "label": "New Process",
+      "id": uniqueID,
+      "label": "New Process" + uniqueID,
       "indent": getIndent(),
-      "parent": getParentId()
+      "parent": getParentId(),
+      "name" : "Please Enter Name of Process",
+      "description":"Process Description"
       };
    // $.extend(item, args.item);
-    dataView.addItem(newNode);
+    //dataView.addItem(newNode);
+    dataView.insertItem(selectedIndex+1, newNode)
      dataView.refresh();
-}
+     grid.invalidateRows(dataView.getItems())
+    grid.invalidate()
+     showLog()
+} 
 function addActivity(){
-
+  var uniqueID = "A" + (Math.round(Math.random() * 10000))
+  if(!selectedItem){
+    alert("Please select element");
+  }
+  showCurrentItem(selectedItem);
   console.log("addActivity***");
   var newNode = {
-      "id": "new_" + (Math.round(Math.random() * 10000)),
-      "label": "New Activity",
+      "id": uniqueID,
+      "label": "New Activity" + uniqueID,
       "indent": getIndent(),
-      "parent": getParentId()
+      "parent": getParentId(),
+       "name" : "Please Enter Name of Activity",
+      "description":"Activity Description"
       };
    // $.extend(item, args.item);
-    dataView.addItem(newNode);
+    //dataView.addItem(newNode);
+    dataView.insertItem(selectedIndex+1, newNode)
     dataView.refresh();
+    grid.invalidateRows(dataView.getItems())
+    grid.invalidate()
+
+showLog()
 }
 
+function showCurrentItem(item){
+  $("#selectedParent").html(JSON.stringify(item))
+}
+function showLog(){
+  //$("#logContainer").html(JSON.stringify(dataView.getItems()))
+}
 function getIndent(){
   console.log(selectedItem)
   if (selectedItem.indent !== undefined){
@@ -168,7 +200,7 @@ function myFilter(item) {
 
   if (item.parent != null) {
     var parent = _.find(data,{parent:item.parent}) ; //data[item.parent];
-    console.log(parent);
+    
 
     while (parent) {
       if (parent._collapsed) {
@@ -176,6 +208,8 @@ function myFilter(item) {
       }
 
       parent = _.find(data,{id:parent.parent}); 
+
+      console.log("looping", parent);
     }
   }
 
@@ -203,7 +237,7 @@ $(function () {
   //     indent--;
   //     parents.pop();
   //   } 
-	
+  
   //   if (parents.length > 0) {
   //     parent = parents[parents.length - 1];
   //   } else {
@@ -228,6 +262,7 @@ $(function () {
   console.log("***",data);
   dataView.setItems(data);
   dataView.setFilter(myFilter);
+  dataView.setFilterArgs(0);
   dataView.endUpdate();
 
 
@@ -237,6 +272,11 @@ $(function () {
   grid.onCellChange.subscribe(function (e, args) {
     dataView.updateItem(args.item.id, args.item);
       console.log("item**",args.item)
+      if(args){
+
+      }
+      dataView.updateItem(args.item.id, args.item);
+
   });
 
   grid.onAddNewRow.subscribe(function (e, args) {
@@ -258,6 +298,7 @@ $(function () {
      console.log('clicked: ');
            console.log(args);
           selectedItem = dataView.getItem(args.row);
+          selectedIndex = args.row;
            console.log(selectedItem);
 
     if ($(e.target).hasClass("toggle")) {
@@ -272,8 +313,11 @@ $(function () {
 
         dataView.updateItem(item.id, item);
       }
-      e.stopImmediatePropagation();
+      
     }
+    //grid.invalidateRow(item.id);
+    //dataView.setItems(dataView.getItems());
+    
   });
 
 
@@ -319,8 +363,18 @@ $(function () {
     dataView.refresh();
   })
 
+
+
   
 })
 </script>
+<div id="selectedParent"></div>
+<div id="logContainer" style="width:400px;border:1px solid #F00">data will be show here</div>
+<table>
+  <tr>
+    <td width="50%"><div id="myGrid" style="height:100%;width:50%"></div></td>
+    <td width="50%"></td>
+  </tr>
+</table>
 </body>
 </html>
